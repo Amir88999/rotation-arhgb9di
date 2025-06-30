@@ -1,83 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Karakuri AR with Pause</title>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+<head>
+  <meta charset="utf-8">
+  <title>AR with Pause</title>
 
-    <style>
-      #pauseBtn {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: rgba(0, 0, 0, 0.6);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        z-index: 999;
-        cursor: pointer;
-      }
+  <!-- AR.js and A-Frame -->
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
 
-      #pauseBtn:hover {
-        background-color: rgba(255, 140, 0, 0.8);
-      }
-    </style>
-  </head>
+  <!-- Optional: Gesture support -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/studio-backend/src/modules/marker/tools/gesture-detector.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/studio-backend/src/modules/marker/tools/gesture-handler.js"></script>
 
-  <body style="margin: 0; overflow: hidden;">
-    <a-scene
-      vr-mode-ui="enabled: false"
-      embedded
-      renderer="logarithmicDepthBuffer: true;"
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-      gesture-detector
-    >
-      <a-assets>
-        <a-asset-item id="animated-asset" src="assets/asset.glb"></a-asset-item>
-      </a-assets>
+  <style>
+    #pauseBtn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-      <a-marker
-        id="animated-marker"
-        type="pattern"
-        preset="custom"
-        url="assets/marker.patt"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-      >
-        <a-entity
-          id="model"
-          gltf-model="#animated-asset"
-          animation-mixer="loop: repeat; clip: *;"
-          scale="0.21 0.21 0.21"
-          class="clickable"
-          gesture-handler
-        ></a-entity>
-      </a-marker>
-
-      <a-entity camera></a-entity>
-    </a-scene>
-
-    <!-- Pause Button -->
-    <button id="pauseBtn">Pause Animation</button>
-
-    <script>
-      const button = document.getElementById('pauseBtn');
-      const model = document.getElementById('model');
-      let isPaused = false;
-
-      button.addEventListener('click', () => {
-        isPaused = !isPaused;
-        model.setAttribute('animation-mixer', 'paused', isPaused);
-        button.textContent = isPaused ? 'Play Animation' : 'Pause Animation';
-      });
-    </script>
-  </body>
-</html>
+    #pauseBtn:active {
+      background: rgb
