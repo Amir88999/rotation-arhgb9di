@@ -30,4 +30,64 @@
     }
 
     #pauseBtn:active {
-      background: rgb
+      background: rgba(255, 140, 0, 0.9);
+    }
+  </style>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+
+  <!-- AR Scene -->
+  <a-scene
+    vr-mode-ui="enabled: false"
+    embedded
+    arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false"
+    renderer="logarithmicDepthBuffer: true;"
+    gesture-detector
+  >
+    <a-assets>
+      <a-asset-item id="animated-asset" src="assets/asset.glb"></a-asset-item>
+    </a-assets>
+
+    <a-marker
+      id="marker"
+      type="pattern"
+      preset="custom"
+      url="assets/marker.patt"
+    >
+      <a-entity
+        id="model"
+        gltf-model="#animated-asset"
+        animation-mixer="loop: repeat"
+        scale="0.21 0.21 0.21"
+        gesture-handler
+      ></a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <!-- Pause Button -->
+  <button id="pauseBtn">Pause Animation</button>
+
+  <script>
+    const model = document.querySelector('#model');
+    const btn = document.querySelector('#pauseBtn');
+
+    let isPaused = false;
+
+    btn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      model.setAttribute('animation-mixer', 'paused', isPaused);
+      btn.textContent = isPaused ? 'Play Animation' : 'Pause Animation';
+    });
+
+    // Fix for iOS: force reflow to draw button
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        btn.style.display = 'block';
+      }, 500);
+    });
+  </script>
+</body>
+</html>
