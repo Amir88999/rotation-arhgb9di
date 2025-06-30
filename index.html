@@ -2,19 +2,20 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>AR Viewer with Pause</title>
+    <title>AR Viewer with Pause & Gesture</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <!-- A-Frame & AR.js -->
+    <!-- Scripts -->
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.3.2/aframe/build/aframe-ar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
 
     <style>
       body {
         margin: 0;
         overflow: hidden;
-        font-family: sans-serif;
       }
 
       .ui-button {
@@ -31,24 +32,19 @@
         z-index: 9999;
         cursor: pointer;
       }
-
-      /* Ensure button displays on iOS */
-      @media (orientation: portrait), (orientation: landscape) {
-        .ui-button { display: block; }
-      }
     </style>
   </head>
 
   <body>
     <a-scene
       embedded
+      arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;"
       vr-mode-ui="enabled: false"
-      loading-screen="enabled: false"
-      renderer="logarithmicDepthBuffer: true"
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false"
+      renderer="logarithmicDepthBuffer: true;"
+      gesture-detector
     >
       <a-assets>
-        <a-asset-item id="karakuriModel" src="assets/asset.glb"></a-asset-item>
+        <a-asset-item id="model" src="assets/asset.glb"></a-asset-item>
       </a-assets>
 
       <a-marker
@@ -57,32 +53,13 @@
         url="assets/marker.patt"
       >
         <a-entity
-          id="karakuri"
-          gltf-model="#karakuriModel"
-          animation-mixer="clip: *; loop: repeat"
+          id="modelEntity"
+          gltf-model="#model"
           scale="0.21 0.21 0.21"
+          animation-mixer
+          gesture-handler
         ></a-entity>
       </a-marker>
 
       <a-entity camera></a-entity>
     </a-scene>
-
-    <!-- Pause/Play Button -->
-    <button class="ui-button" id="pauseBtn">Pause Animation</button>
-
-    <script>
-      const model = document.querySelector('#karakuri');
-      const button = document.querySelector('#pauseBtn');
-      let isPaused = false;
-
-      button.addEventListener('click', () => {
-        const mixer = model.components['animation-mixer'];
-        if (mixer) {
-          mixer.pause(!isPaused);
-          isPaused = !isPaused;
-          button.textContent = isPaused ? 'Play Animation' : 'Pause Animation';
-        }
-      });
-    </script>
-  </body>
-</html>
