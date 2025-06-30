@@ -63,3 +63,27 @@
 
       <a-entity camera></a-entity>
     </a-scene>
+
+    <button class="ui-button" id="toggleBtn">Pause Animation</button>
+
+    <script>
+      const btn = document.getElementById("toggleBtn");
+      const model = document.getElementById("modelEntity");
+      let isPaused = false;
+
+      btn.addEventListener("click", () => {
+        const mixer = model.components["animation-mixer"];
+        if (mixer && mixer.mixer) {
+          if (isPaused) {
+            mixer.mixer.timeScale = 1;
+            btn.textContent = "Pause Animation";
+          } else {
+            mixer.mixer.timeScale = 0;
+            btn.textContent = "Play Animation";
+          }
+          isPaused = !isPaused;
+        }
+      });
+    </script>
+  </body>
+</html>
